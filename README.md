@@ -8,6 +8,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
+| v4.2.0 | [`v4.2.0`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.2.0) | [`b23f0de`](https://github.com/sclorg/testing-farm-as-github-action/commit/b23f0de29ac969d12411215a983da264b4ced149) |
 | v4.3.0 | [`v4.3.0`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.3.0) | [`e0ecc7a`](https://github.com/sclorg/testing-farm-as-github-action/commit/e0ecc7ae3fb234c31f0b275084f565653b6cb2a4) |
 
 ## Privacy
