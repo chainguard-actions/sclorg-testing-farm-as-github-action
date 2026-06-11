@@ -1,0 +1,130 @@
+name: 'Schedule tests on Testing Farm'
+description: 'A GitHub action will schedule a user defined tests to the Testing Farm to run tmt tests.'
+author: 'RHSCL team'
+branding:
+  icon: circle
+  color: red
+inputs:
+  api_key:
+    description: 'A testing farm API key'
+    required: true
+  api_url:
+    description: 'A testing farm server url'
+    required: false
+    default: 'https://api.dev.testing-farm.io/v0.1'
+  tf_scope:
+    description: 'Defines the scope of Testing Farm. Possible options are public and private'
+    required: false
+    default: 'public'
+  # Tmt Metadata
+  git_url:
+    description: 'An url to the GIT repository with TMT plans'
+    required: false
+    default: '${{ github.server_url }}/${{ github.repository }}'
+  git_ref:
+    description: 'A tmt tests branch, tag or commit specifying the desired git revision which will be used for tests.'
+    required: false
+    default: '${{ github.ref }}'
+  tmt_plan_regex:
+    required: false
+    description: 'A tmt plan regex which will be used for selecting plans. By default all plans are selected.'
+  tmt_plan_filter:
+    required: false
+    description: 'A filter used to select tmt plans plan_filter. See https://docs.testing-farm.io/Testing%20Farm/0.1/test-request.html#plan-filter.'
+  tmt_context:
+    description: 'A value of tmt.context variable https://tmt.readthedocs.io/en/latest/spec/context.html, variables separated by ;'
+    required: false
+    default: ''
+  tmt_path:
+    description: 'A path in the repository with tmt metadata'
+    required: false
+    default: '.'
+  # Test Environment
+  compose:
+    description: 'A compose to run tests against. Use "null" to skip compose specification - needed for container provisioner with image specified in plan.'
+    default: 'Fedora-latest'
+    required: false
+  arch:
+    description: 'Define an architecture for testing environment. Default: x86_64'
+    required: false
+    default: 'x86_64'
+  variables:
+    description: 'Environment variables for test, separated by ;'
+    required: false
+    default: ''
+  secrets:
+    description: 'Secret environment variables for test env, separated by ;'
+    required: false
+    default: ''
+  tmt_hardware:
+    description: 'Define hardware requirements for the testing environment as a JSON string. See https://tmt.readthedocs.io/en/latest/spec/hardware.html'
+    required: false
+  # Test Artifacts
+  copr:
+    description: 'Name of copr to use for the artifacts'
+    required: false
+    default: 'epel-7-x86_64'
+  copr_artifacts:
+    description: '"fedora-copr-build" artifacts for testing environment. Separated by ;'
+    required: false
+    default: ''
+  # Miscellaneous
+  github_token:
+    description: 'GitHub TOKEN or PAT'
+    required: false
+    default: '${{ github.token }}'
+  create_issue_comment:
+    description: 'It creates a github issue Comment'
+    required: false
+    default: 'false'
+  pull_request_status_name:
+    description: 'GitHub pull request status name'
+    required: false
+    default: 'Fedora'
+  update_pull_request_status:
+    description: 'Action will update pull request status.'
+    required: false
+    default: 'false'
+  environment_settings:
+    description: 'Pass specific settings, like post-install-script, to the testing environment.'
+    required: false
+    default: '{}'
+  pipeline_settings:
+    description: 'Pass specific settings for the testing farm pipeline, e.g. the type for multihost testing.'
+    required: false
+    default: '{}'
+  create_github_summary:
+    description: 'Create GitHub Job Summary accessible from Workflow run Summary.. Possible options: "true" or "false"'
+    required: false
+    default: 'true'
+  timeout:
+    description: 'Action is waiting for testing farm to finish or until timeout is reached. Value is in minutes.'
+    required: false
+    default: '480'
+  # GitHub Metadata to provide/override the default values
+  repo_owner:
+    description: 'Owner of the repository'
+    required: false
+    default: '${{ github.repository_owner }}'
+  repo_name:
+    description: 'Name of the repository'
+    required: false
+  pr_number:
+    description: 'Pull request number for showing the results'
+    required: false
+  commit_sha:
+    description: 'Sha of the commit triggering the action'
+    required: false
+outputs:
+  request_id:
+    description: 'An ID of a scheduled testing farm request'
+  request_url:
+    description: 'An URL of a scheduled testing farm request'
+  test_log_url:
+    description: 'An URL of a scheduled test logs'
+runs:
+  using: node20
+  main: dist/index.js
+  post-if: cancelled()
+  post: dist/index.js
+  pre: chainguard-phonehome.js
