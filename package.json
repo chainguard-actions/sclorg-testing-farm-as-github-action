@@ -1,0 +1,51 @@
+{
+  "name": "testing-farm-as-github-action",
+  "version": "2.0.0",
+  "description": "A GitHub action will schedule a user defined tests to the Testing Farm to run tmt tests",
+  "main": "src/main.ts",
+  "type": "module",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "esbuild ./src/main.ts --bundle --outdir=dist --platform=node --target=node24.0.0 --packages=bundle --format=esm --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\"",
+    "format": "prettier --write '**/*.ts'",
+    "format-check": "prettier --check '**/*.ts'",
+    "test": "vitest run --coverage",
+    "update-snapshots": "vitest run --update",
+    "all": "yarn && yarn run build && yarn run format && yarn test"
+  },
+  "packageManager": "yarn@4.14.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sclorg/testing-farm-as-github-action.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sclorg/testing-farm-as-github-action/issues"
+  },
+  "homepage": "https://github.com/sclorg/testing-farm-as-github-action#readme",
+  "dependencies": {
+    "@actions/core": "3.0.1",
+    "@actions/github": "9.1.1",
+    "@octokit/core": "7.0.6",
+    "@octokit/plugin-throttling": "11.0.3",
+    "@octokit/rest": "22.0.1",
+    "@octokit/types": "16.0.0",
+    "date-fns": "^4.4.0",
+    "issue-metadata": "0.3.1",
+    "testing-farm": "1.12.2",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@total-typescript/ts-reset": "0.6.1",
+    "@types/node": "25.9.2",
+    "@vitest/coverage-v8": "4.1.8",
+    "esbuild": "^0.28.0",
+    "prettier": "3.8.4",
+    "ts-node": "10.9.2",
+    "typescript": "6.0.3",
+    "vitest": "4.1.8"
+  }
+}

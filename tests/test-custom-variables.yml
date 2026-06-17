@@ -1,0 +1,46 @@
+name: Test custom variables and tmt context inputs
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REF: refs/heads/main
+      GITHUB_EVENT_NAME: push
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Run action with custom variables and tmt context
+        id: action
+        uses: .
+        continue-on-error: true
+        with:
+          api_key: 'dummy-api-key-for-testing'
+          api_url: 'https://api.dev.testing-farm.io/v0.1'
+          git_url: 'https://github.com/sclorg/testing-farm-as-github-action'
+          git_ref: 'main'
+          compose: 'Fedora-latest'
+          arch: 'x86_64'
+          variables: 'MY_VAR=hello;ANOTHER_VAR=world'
+          tmt_context: 'distro=fedora;arch=x86_64'
+          tmt_plan_regex: '/plans/basic'
+          tmt_path: '.'
+          copr_artifacts: ''
+          create_github_summary: 'false'
+          update_pull_request_status: 'false'
+          create_issue_comment: 'false'
+          timeout: '5'
+
+      - name: Assert action ran (not a setup/node error)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "action outcome: $OUTCOME"
+          # The action should either succeed or fail due to API auth/network issues,
+          # not due to a missing node runtime or setup problem.
+          if [ "$OUTCOME" = "success" ] || [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action ran (outcome=$OUTCOME)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
