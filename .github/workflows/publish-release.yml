@@ -1,0 +1,27 @@
+---
+
+name: GitHub Tag Update
+
+on:
+  release:
+    types: [ published, edited ]
+
+permissions:
+  contents: read
+
+jobs:
+  tag-update:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Update tag
+        uses: Actions-R-Us/actions-tagger@330ddfac760021349fef7ff62b372f2f691c20fb # v2
+        with:
+          publish_latest_tag: false
+          token: ${{ secrets.GITHUB_TOKEN }}
