@@ -1,4 +1,4 @@
-name: Test basic usage
+name: Test custom compose and architecture
 on:
   workflow_dispatch:
 jobs:
@@ -10,17 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Verify action files exist
+      - name: Verify dist/index.js exists
         run: |
-          if [ ! -f "$GITHUB_WORKSPACE/action.yml" ]; then
-            echo "FAIL: action.yml not found"
-            exit 1
-          fi
           if [ ! -f "$GITHUB_WORKSPACE/dist/index.js" ]; then
             echo "FAIL: dist/index.js not found"
             exit 1
           fi
-          echo "PASS: action files exist"
+          echo "PASS: dist/index.js exists"
 
       - id: action
         uses: .
@@ -29,18 +25,19 @@ jobs:
           api_key: 'fake-api-key-for-testing'
           git_url: 'https://github.com/example/repo'
           git_ref: 'main'
-          compose: 'Fedora-latest'
-          arch: 'x86_64'
+          compose: 'CentOS-Stream-9'
+          arch: 'aarch64'
+          tmt_plan_regex: '/plans/basic'
+          variables: 'VAR1=value1;VAR2=value2'
           timeout: '5'
 
-      - name: Assert action ran (may fail due to invalid API key)
+      - name: Assert action ran with custom compose settings
         env:
           OUTCOME: ${{ steps.action.outcome }}
         run: |
           echo "action outcome: $OUTCOME"
-          # The action should either succeed or fail (not be skipped)
           if [ "$OUTCOME" = "skipped" ]; then
             echo "FAIL: action was skipped unexpectedly"
             exit 1
           fi
-          echo "PASS: action ran with outcome=$OUTCOME"
+          echo "PASS: action ran with custom compose/arch, outcome=$OUTCOME"

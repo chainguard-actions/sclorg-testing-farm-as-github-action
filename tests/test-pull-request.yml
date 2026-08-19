@@ -1,12 +1,14 @@
-name: Test basic usage
+name: Test pull request event context
 on:
   workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      GITHUB_REF: refs/heads/main
-      GITHUB_EVENT_NAME: push
+      GITHUB_REF: refs/pull/42/merge
+      GITHUB_EVENT_NAME: pull_request
+      GITHUB_HEAD_REF: feature-branch
+      GITHUB_BASE_REF: main
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -28,19 +30,23 @@ jobs:
         with:
           api_key: 'fake-api-key-for-testing'
           git_url: 'https://github.com/example/repo'
-          git_ref: 'main'
+          git_ref: 'feature-branch'
           compose: 'Fedora-latest'
           arch: 'x86_64'
+          pr_number: '42'
+          commit_sha: 'abc1234def5678901234567890abcdef12345678'
+          update_pull_request_status: 'false'
+          create_issue_comment: 'false'
+          create_github_summary: 'false'
           timeout: '5'
 
-      - name: Assert action ran (may fail due to invalid API key)
+      - name: Assert action ran in PR context
         env:
           OUTCOME: ${{ steps.action.outcome }}
         run: |
           echo "action outcome: $OUTCOME"
-          # The action should either succeed or fail (not be skipped)
           if [ "$OUTCOME" = "skipped" ]; then
             echo "FAIL: action was skipped unexpectedly"
             exit 1
           fi
-          echo "PASS: action ran with outcome=$OUTCOME"
+          echo "PASS: action ran in PR context, outcome=$OUTCOME"
