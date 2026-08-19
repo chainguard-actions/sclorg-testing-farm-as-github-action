@@ -1,4 +1,4 @@
-name: Test basic invocation with invalid API key
+name: Test missing required api_key input
 on:
   workflow_dispatch:
 jobs:
@@ -10,29 +10,25 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Invoke action with fake API key (expect failure)
+      - name: Invoke action without api_key (expect failure)
         id: action
         uses: .
         continue-on-error: true
         with:
-          api_key: fake-api-key-for-testing
-          api_url: https://api.dev.testing-farm.io/v0.1
+          api_key: ''
           git_url: https://github.com/teemtee/tmt
           git_ref: main
           compose: Fedora-latest
-          arch: x86_64
-          tmt_plan_regex: /plans/features/basic
           timeout: '5'
 
-      - name: Assert action ran (outcome is failure due to invalid key)
+      - name: Assert action failed due to missing api_key
         env:
           OUTCOME: ${{ steps.action.outcome }}
         run: |
           echo "action outcome: $OUTCOME"
-          if [ "$OUTCOME" = "success" ] || [ "$OUTCOME" = "failure" ]; then
-            echo "PASS: action ran and produced an outcome"
+          if [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action correctly failed when api_key is missing"
           else
-            echo "FAIL: unexpected outcome '$OUTCOME'"
+            echo "FAIL: expected failure but got '$OUTCOME'"
             exit 1
           fi
-          echo "PASS"
