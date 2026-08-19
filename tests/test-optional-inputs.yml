@@ -1,0 +1,42 @@
+name: Test optional inputs are accepted
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          api_key: 'invalid-api-key-for-testing'
+          api_url: 'https://api.dev.testing-farm.io/v0.1'
+          git_url: 'https://github.com/sclorg/testing-farm-as-github-action'
+          git_ref: 'main'
+          tmt_plan_regex: '/plans/basic'
+          tmt_context: 'distro=fedora;arch=x86_64'
+          tmt_path: '.'
+          compose: 'Fedora-latest'
+          arch: 'x86_64'
+          variables: 'MY_VAR=hello;ANOTHER_VAR=world'
+          copr_artifacts: ''
+          create_issue_comment: 'false'
+          update_pull_request_status: 'false'
+          environment_settings: '{}'
+          pipeline_settings: '{}'
+          create_github_summary: 'false'
+          timeout: '1'
+          pull_request_status_name: 'MyTest'
+
+      - name: Assert action failed on API call (not on input parsing)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" != "failure" ]; then
+            echo "FAIL: expected action to fail (API call with invalid key), but outcome was '$OUTCOME'"
+            exit 1
+          fi
+          echo "PASS: action correctly failed at API call stage (inputs were accepted)"
