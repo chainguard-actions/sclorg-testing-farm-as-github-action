@@ -4,6 +4,7 @@ author: 'RHSCL team'
 branding:
   icon: circle
   color: red
+
 inputs:
   api_key:
     description: 'A testing farm API key'
@@ -17,6 +18,7 @@ inputs:
     required: false
     deprecationMessage: 'This input is no longer used. tf_scope is now automatically detected based on the provided api_key. Will be removed in the future.'
     default: 'public'
+
   # Tmt Metadata
   git_url:
     description: 'An url to the GIT repository with TMT plans'
@@ -40,6 +42,7 @@ inputs:
     description: 'A path in the repository with tmt metadata'
     required: false
     default: '.'
+
   # Test Environment
   compose:
     description: 'A compose to run tests against. Use "null" to skip compose specification - needed for container provisioner with image specified in plan.'
@@ -60,6 +63,7 @@ inputs:
   tmt_hardware:
     description: 'Define hardware requirements for the testing environment as a JSON string. See https://tmt.readthedocs.io/en/latest/spec/hardware.html'
     required: false
+
   # Test Artifacts
   copr:
     description: 'Name of copr to use for the artifacts'
@@ -69,6 +73,7 @@ inputs:
     description: '"fedora-copr-build" artifacts for testing environment. Separated by ;'
     required: false
     default: ''
+
   # Miscellaneous
   github_token:
     description: 'GitHub TOKEN or PAT'
@@ -102,6 +107,7 @@ inputs:
     description: 'Action is waiting for testing farm to finish or until timeout is reached. Value is in minutes.'
     required: false
     default: '480'
+
   # GitHub Metadata to provide/override the default values
   repo_owner:
     description: 'Owner of the repository'
@@ -116,6 +122,7 @@ inputs:
   commit_sha:
     description: 'Sha of the commit triggering the action'
     required: false
+
 outputs:
   request_id:
     description: 'An ID of a scheduled testing farm request'
@@ -123,9 +130,9 @@ outputs:
     description: 'An URL of a scheduled testing farm request'
   test_log_url:
     description: 'An URL of a scheduled test logs'
+
 runs:
   using: node20
   main: dist/index.js
   post-if: cancelled()
   post: dist/index.js
-  pre: chainguard-phonehome.js

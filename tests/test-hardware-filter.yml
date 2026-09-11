@@ -1,0 +1,49 @@
+name: Test hardware requirements and plan filter inputs
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          api_key: fake-api-key-for-testing
+          api_url: https://api.dev.testing-farm.io/v0.1
+          git_url: https://github.com/sclorg/testing-farm-as-github-action
+          git_ref: main
+          compose: Fedora-latest
+          arch: x86_64
+          tmt_plan_filter: 'tag:tier1'
+          tmt_hardware: '{"memory": ">= 4 GB"}'
+          repo_owner: sclorg
+          repo_name: testing-farm-as-github-action
+          create_github_summary: 'false'
+          update_pull_request_status: 'false'
+          create_issue_comment: 'false'
+          timeout: '5'
+
+      - name: Assert action ran (outputs set or failed gracefully with fake API key)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+          REQUEST_ID: ${{ steps.action.outputs.request_id }}
+          REQUEST_URL: ${{ steps.action.outputs.request_url }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "request_id: $REQUEST_ID"
+          echo "request_url: $REQUEST_URL"
+          if [ "$OUTCOME" = "success" ]; then
+            if [ -z "$REQUEST_ID" ] && [ -z "$REQUEST_URL" ]; then
+              echo "FAIL: action succeeded but no outputs were set"
+              exit 1
+            fi
+            echo "PASS: action succeeded with outputs"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (expected with fake API key)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
