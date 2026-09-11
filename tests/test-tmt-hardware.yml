@@ -6,29 +6,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
       - id: action
         uses: .
         continue-on-error: true
         with:
-          api_key: 'invalid-api-key-for-testing'
-          git_url: 'https://github.com/sclorg/testing-farm-as-github-action'
-          git_ref: 'main'
-          compose: 'Fedora-latest'
-          arch: 'x86_64'
+          api_key: fake-api-key-for-testing
+          git_url: https://github.com/teemtee/tmt
+          git_ref: main
+          compose: Fedora-latest
           tmt_hardware: '{"memory": ">= 8 GB", "cpu": {"processors": ">= 2"}}'
-          create_github_summary: 'false'
-          update_pull_request_status: 'false'
-          timeout: '1'
-
-      - name: Assert action ran (expected to fail due to invalid API key)
+          timeout: '5'
+      - name: Assert action ran with tmt_hardware input
         env:
           OUTCOME: ${{ steps.action.outcome }}
+          REQUEST_ID: ${{ steps.action.outputs.request_id }}
+          REQUEST_URL: ${{ steps.action.outputs.request_url }}
         run: |
           echo "outcome: $OUTCOME"
-          # The action should fail (invalid API key), not be skipped
-          if [ "$OUTCOME" = "skipped" ]; then
-            echo "FAIL: action was skipped unexpectedly"
+          echo "request_id: $REQUEST_ID"
+          echo "request_url: $REQUEST_URL"
+          if [ "$OUTCOME" = "success" ]; then
+            if [ -z "$REQUEST_ID" ]; then
+              echo "FAIL: action succeeded but request_id is empty"
+              exit 1
+            fi
+            echo "PASS: got request_id '$REQUEST_ID'"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (invalid API key or sentinel repo)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
             exit 1
           fi
-          echo "PASS: action ran with tmt_hardware input, outcome=$OUTCOME"
