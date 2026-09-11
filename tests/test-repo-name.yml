@@ -1,4 +1,4 @@
-name: Test tmt_plan_filter input
+name: Test repo_name input
 on:
   workflow_dispatch:
 jobs:
@@ -15,7 +15,9 @@ jobs:
           git_ref: main
           compose: Fedora-latest
           arch: x86_64
-          tmt_plan_filter: 'tag:tier1'
+          repo_name: testing-farm-as-github-action
+          repo_owner: sclorg
+          tmt_plan_regex: /plans/
           timeout: '5'
       - name: Assert action ran and failed gracefully (invalid API key)
         env:

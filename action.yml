@@ -135,7 +135,6 @@ outputs:
     description: 'An URL of a scheduled test logs'
 
 runs:
-  pre: chainguard-phonehome.js
   using: node24
   main: dist/main.js
   post-if: cancelled()
