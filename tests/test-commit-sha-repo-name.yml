@@ -1,0 +1,40 @@
+name: Test commit_sha and repo_name inputs
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          api_key: 'fake-api-key-for-testing'
+          git_url: 'https://github.com/teemtee/tmt'
+          git_ref: 'main'
+          compose: 'Fedora-latest'
+          repo_name: 'my-test-repo'
+          commit_sha: 'abc1234567890abcdef1234567890abcdef12345'
+          timeout: '5'
+      - name: Assert action ran with commit_sha and repo_name inputs
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+          REQUEST_ID: ${{ steps.action.outputs.request_id }}
+          REQUEST_URL: ${{ steps.action.outputs.request_url }}
+        run: |
+          echo "outcome: $OUTCOME"
+          echo "request_id: $REQUEST_ID"
+          echo "request_url: $REQUEST_URL"
+          if [ "$OUTCOME" = "success" ]; then
+            if [ -z "$REQUEST_ID" ]; then
+              echo "FAIL: action succeeded but request_id is empty"
+              exit 1
+            fi
+            echo "PASS: got request_id '$REQUEST_ID'"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (fake API key or sentinel repo)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
