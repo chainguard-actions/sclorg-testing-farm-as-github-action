@@ -6,14 +6,14 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 ## Versions
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v3.1.2 | [`v3.1.2`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v3.1.2) | [`270f0d1`](https://github.com/sclorg/testing-farm-as-github-action/commit/270f0d1d89dad513588fb5cc2cdd512c3459f3fe) |
-| v4.0.0 | [`v4.0.0`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.0.0) | [`6ad06b7`](https://github.com/sclorg/testing-farm-as-github-action/commit/6ad06b72bd51cc1efdacd447b7ca546918400dec) |
-| v4.1.0 | [`v4.1.0`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.1.0) | [`f3a3927`](https://github.com/sclorg/testing-farm-as-github-action/commit/f3a39272a197ed060d5f786186b0e7a3ee7b0b4f) |
-| v4.2.0 | [`v4.2.0`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.2.0) | [`b23f0de`](https://github.com/sclorg/testing-farm-as-github-action/commit/b23f0de29ac969d12411215a983da264b4ced149) |
-| v4.3.0 | [`v4.3.0`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.3.0) | [`e0ecc7a`](https://github.com/sclorg/testing-farm-as-github-action/commit/e0ecc7ae3fb234c31f0b275084f565653b6cb2a4) |
-| v4.3.1 | [`v4.3.1`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.3.1) | [`230555b`](https://github.com/sclorg/testing-farm-as-github-action/commit/230555baceb860aa468d216f1822974836b965d1) |
+| Version | Tag | Upstream commit | Hardening report |
+|---------|-----|-----------------|------------------|
+| v3.1.2 | [`v3.1.2`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v3.1.2) | [`270f0d1`](https://github.com/sclorg/testing-farm-as-github-action/commit/270f0d1d89dad513588fb5cc2cdd512c3459f3fe) | [`HARDENING.md`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/blob/v3.1.2/HARDENING.md) |
+| v4.0.0 | [`v4.0.0`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.0.0) | [`6ad06b7`](https://github.com/sclorg/testing-farm-as-github-action/commit/6ad06b72bd51cc1efdacd447b7ca546918400dec) | [`HARDENING.md`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/blob/v4.0.0/HARDENING.md) |
+| v4.1.0 | [`v4.1.0`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.1.0) | [`f3a3927`](https://github.com/sclorg/testing-farm-as-github-action/commit/f3a39272a197ed060d5f786186b0e7a3ee7b0b4f) | [`HARDENING.md`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/blob/v4.1.0/HARDENING.md) |
+| v4.2.0 | [`v4.2.0`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.2.0) | [`b23f0de`](https://github.com/sclorg/testing-farm-as-github-action/commit/b23f0de29ac969d12411215a983da264b4ced149) | [`HARDENING.md`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/blob/v4.2.0/HARDENING.md) |
+| v4.3.0 | [`v4.3.0`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.3.0) | [`e0ecc7a`](https://github.com/sclorg/testing-farm-as-github-action/commit/e0ecc7ae3fb234c31f0b275084f565653b6cb2a4) | [`HARDENING.md`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/blob/v4.3.0/HARDENING.md) |
+| v4.3.1 | [`v4.3.1`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/tree/v4.3.1) | [`230555b`](https://github.com/sclorg/testing-farm-as-github-action/commit/230555baceb860aa468d216f1822974836b965d1) | [`HARDENING.md`](https://github.com/chainguard-actions/sclorg-testing-farm-as-github-action/blob/v4.3.1/HARDENING.md) |
 
 ## Privacy
 
